@@ -102,7 +102,12 @@
       </div>
 
       <div class="merchant-info">
-        <button class="notification-icon">
+        <button
+          class="notification-icon"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="notification-menu-content"
+        >
           <svg
             width="20"
             height="20"
@@ -118,7 +123,7 @@
             />
           </svg>
           <div>
-            <div class="notification-menu">
+            <div id="notification-menu-content" class="notification-menu">
               <div class="settings">
                 <p>Alerts</p>
                 <div>
@@ -168,11 +173,22 @@
             </div>
           </div>
         </button>
-        <button class="name-tag">
+        <button
+          id="profile-menu-toggler"
+          class="name-tag"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="profile-menu-content"
+        >
           <p>Davii Collections</p>
           <span>DC</span>
           <div>
-            <div class="profile-menu">
+            <div
+              id="profile-menu-content"
+              class="profile-menu"
+              role="menu"
+              aria-labelledby="profile-menu-toggler"
+            >
               <div class="first-section">
                 <a href="" class="first-container">
                   <span>DC</span>
