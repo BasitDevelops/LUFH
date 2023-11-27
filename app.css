@@ -12,12 +12,11 @@ a {
 button {
   background: none;
   border: none;
-  /* outline: none; */
   cursor: pointer;
 }
 
-button:focus {
-  /* outline: #005bd3 solid 3px; */
+.hidden {
+  display: none;
 }
 
 nav {
@@ -98,11 +97,6 @@ nav {
 .merchant-info .notification-icon:hover,
 .merchant-info .name-tag:hover {
   background-color: #616161;
-}
-
-.merchant-info .notification-icon:active,
-.merchant-info .name-tag:active {
-  background-color: #656266;
 }
 
 .merchant-info .notification-icon:focus,
@@ -439,10 +433,6 @@ main {
   border-radius: 0.375rem;
 }
 
-.select-a-plan .close-btn:focus {
-  /* outline: #005bd3 solid 3px; */
-}
-
 .close {
   display: none !important;
 }
@@ -672,22 +662,12 @@ main {
   background-color: #f1f1f1;
 }
 
-.merchant-info .profile-menu a:active,
-.select-a-plan .select-a-plan-btn:active,
-.accordion-toggle-btn:active {
-  background-color: #f0f0f0;
-}
-
 .merchant-info .profile-menu a:focus {
   outline: #005bd3 solid 3px;
 }
 
 .basic-btn:hover {
   background-color: #e7e7e7;
-}
-
-.basic-btn:active {
-  background-color: #e0e0e0;
 }
 
 .basic-btn:focus {

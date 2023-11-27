@@ -7,6 +7,7 @@ const profileMenu = document.querySelector(".profile-menu");
 const selectAPlanCloseBtn = document.querySelector(".select-a-plan .close-btn");
 const selectAPlanCTA = document.querySelector(".select-a-plan");
 
+const setupProgressNo = document.querySelector(".progress-no");
 const setupProgress = document.querySelector(".progress");
 
 const accordionToggleBtn = document.querySelector(".accordion-toggle-btn");
@@ -20,14 +21,95 @@ notificationIcon.addEventListener("click", () => {
   if (profileMenu.classList.contains("open-menu")) {
     profileMenu.classList.remove("open-menu");
   }
+
   notificationMenu.classList.toggle("open-menu");
+});
+
+const allMenuItems = profileMenu.querySelectorAll('[role="menuitem"]');
+
+const handleMenuItemsArrowKeyPress = (event, menuItemIndex) => {
+  const firstMenuItem = menuItemIndex === 0;
+  const lastMenuItem = menuItemIndex === allMenuItems.length - 1;
+
+  const nextMenuItem = allMenuItems.item(menuItemIndex + 1);
+  const prevMenuItem = allMenuItems.item(menuItemIndex - 1);
+
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    if (lastMenuItem) {
+      allMenuItems.item(0).focus();
+
+      return;
+    }
+    nextMenuItem.focus();
+  }
+
+  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    if (firstMenuItem) {
+      allMenuItems.item(allMenuItems.length - 1).focus();
+
+      return;
+    }
+    prevMenuItem.focus();
+  }
+};
+
+const handleAccordionItemsArrowKeyPress = (event, accordionItemIndex) => {
+  const firstAccordionItem = accordionItemIndex === 0;
+  const lastAccordionItem = accordionItemIndex === accordionItems.length - 1;
+
+  const nextAccordionItem = accordionItems.item(accordionItemIndex + 1);
+  const prevAccordionItem = accordionItems.item(accordionItemIndex - 1);
+
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    if (lastAccordionItem) {
+      accordionItems.item(0).focus();
+
+      return;
+    }
+    nextAccordionItem.focus();
+  }
+
+  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    if (firstAccordionItem) {
+      accordionItems.item(accordionItems.length - 1).focus();
+
+      return;
+    }
+    prevAccordionItem.focus();
+  }
+};
+
+allMenuItems.forEach((menuItem, menuItemIndex) => {
+  menuItem.addEventListener("keyup", (event) =>
+    handleMenuItemsArrowKeyPress(event, menuItemIndex)
+  );
 });
 
 nameTag.addEventListener("click", () => {
   if (notificationMenu.classList.contains("open-menu")) {
     notificationMenu.classList.remove("open-menu");
   }
+
+  const isExpanded = nameTag.attributes["aria-expanded"].value === "true";
+
+  const allMenuItems = profileMenu.querySelectorAll('[role="menuitem"]');
   profileMenu.classList.toggle("open-menu");
+
+  if (isExpanded) {
+    nameTag.ariaExpanded = "false";
+    nameTag.focus();
+  } else {
+    nameTag.ariaExpanded = "true";
+    allMenuItems.item(0).focus();
+  }
+});
+
+nameTag.addEventListener("keyup", (event) => {
+  if (event.key === "Escape") {
+    profileMenu.classList.remove("open-menu");
+    nameTag.ariaExpanded = "false";
+    nameTag.focus();
+  }
 });
 
 selectAPlanCloseBtn.addEventListener("click", () => {
@@ -60,22 +142,26 @@ accordionItems.forEach((accordionItem) => {
     // Toggle "active" class on the clicked accordion item
     accordionItem.classList.add("active");
   });
+
+  accordionItem.addEventListener("keyup", (event) => {
+    if (event.key === "Escape") {
+      accordionItem.classList.remove("active");
+      accordionItem.ariaExpanded = "false";
+      accordionItem.focus();
+    }
+  });
+});
+
+accordionItems.forEach((accordionItem, accordionItemIndex) => {
+  accordionItem.addEventListener("keyup", (event) =>
+    handleAccordionItemsArrowKeyPress(event, accordionItemIndex)
+  );
 });
 
 let progress = 0;
+let progressNo = 0;
+
 checkMarkBtns.forEach((btn) => {
-  //   btn.addEventListener("mouseover", () => {
-  //     btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  //       <circle cx="12" cy="12" r="10" stroke="#8A8A8A" stroke-width="2.08333" stroke-linecap="round" stroke-linejoin="round"/>
-  //     </svg>`;
-  //   });
-
-  //   btn.addEventListener("mouseout", () => {
-  //     btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  //       <circle cx="12" cy="12" r="10" stroke="#8A8A8A" stroke-width="2.08333" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
-  //     </svg>`;
-  //   });
-
   btn.addEventListener("click", () => {
     const defaultSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="12" cy="12" r="10" stroke="#8A8A8A" stroke-width="2.08333" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
@@ -107,11 +193,8 @@ checkMarkBtns.forEach((btn) => {
         ></path>
         </svg>`;
 
-    // setupProgress.style = {
-    //   width: "16px",
-    // };
-
     if (btn.id === "false") {
+      progressNo = progressNo + 1;
       progress = progress + 16;
       setupProgress.style.width = `${progress}px`;
       console.log(setupProgress.style.width);
@@ -135,6 +218,7 @@ checkMarkBtns.forEach((btn) => {
 
       btn.id = true;
     } else {
+      progressNo = progressNo - 1;
       progress = progress - 16;
       setupProgress.style.width = `${progress}px`;
       setTimeout(() => {
@@ -155,5 +239,7 @@ checkMarkBtns.forEach((btn) => {
 
       btn.id = false;
     }
+
+    setupProgressNo.innerHTML = progressNo;
   });
 });
